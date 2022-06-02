@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dice Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <style>
+        body{
+        background-color: rgba(0, 200, 200, .2) ;
+        font-family: 'Oswald', sans-serif;
+        font-size: 50px;
+        }
+
+        button{
+        background-color: #f568;
+        color: #fff;
+        border-color: pink;
+        font-size: 30px
+        }
+        #container{
+        margin:40px 18px;
+        background-color: #fff;
+        background-size: contain;
+
+        padding: 50px 30px;
+        box-shadow:  5px 5px 20px 5px  ;
+        }
+        #game-info{
+        display: flex
+        }
+        #player-1, #player-2{
+        width:50%;
+        text-align:center;
+        font-weight: 300;
+        padding: 1px;
+        }
+        .dice-no{
+        padding-bottom:10px ; 
+        background-color:burlywood;
+        margin:0px 0px 60px 0px ;
+        border: solid 2px burlywood;
+        border-radius: 10px;
+        display: inline-block;
+        width: 100px;
+        }
+        p{
+        margin: 5px;
+        }
+        #roll-btn{
+        width: 200px;
+        margin:auto; 
+        display: none; 
+        animation-name: appear;
+        animation-duration: 2s
+        }
+        .how-to-play{
+        font-size: 30px;
+        font-weight:300;
+        }
+        @keyframes appear{
+        0%   {
+        left:0px; top:0px
+        ;}
+        25%  {
+        left:0px; top:200px
+        ;}
+        50%  {
+        left:200px; top:200px
+        ;}
+        75%  {
+        left:200px; top:0px
+        ;}
+        100% {
+        left:0px; top:0px
+        ;}
+        }
+        @media(max-width:400px){
+        #player-1, #player-2{
+        width:50%;
+        text-align:center;
+        font-weight: 300;
+        padding: 1px;
+        }
+        body{
+        background-color: rgba(0, 200, 200, .2) ;
+        font-family: 'Oswald', sans-serif;
+        font-size: 30px;
+        }
+        button{
+        background-color: #f568;
+        color: #fff;
+        border-color: pink;
+        font-size: 15px
+        }
+        .dice-no{
+        padding-bottom:10px ; 
+        background-color:burlywood;
+        margin:0px 0px 60px 0px ;
+        border: solid 2px burlywood;
+        border-radius: 10px;
+        display: inline-block;
+        width: 70px;
+        }
+        }
+    </style>
+    <body>
+            <div id="container">
+                <div id="play-btn-div">
+                    <button id="play-btn">Play</button>
+                </div>
+                <div id= game-info>
+                <div id ="player-1">
+                    <p id="score1">Score:0<p><br>
+                    <p class="dice-no">-</p>
+                </div>
+                <div id="player-2">
+                    <p id ="score2">Score:0<p><br>
+                    <p class="dice-no">-</p>
+                </div>
+                </div>
+                 
+                <button id="roll-btn">Roll the dice</button><br>
+                <button onclick="reloadBtn()">start new game</button>
+                <hr>
+            <p class="how-to-play">The rules of the game are simple if the player wishes to play against the computer he /she should click the
+                 <q>Against computer</q> button and otherwise click the 
+                 <q>Against Human
+                 </q> button after which at the heading the player to roll will be indicated. To roll a dice click on the
+                 <q>Roll dice</q> button the first to  twenty wins</p>
+                 <blockquote class="how-to-play"> Good luck.</blockquote>
+            </div>
+            <script >
+                const playBtn=document.getElementById("play-btn")
+                const playBtnDiv=document.getElementById("play-btn-div")
+                const rollBtn=document.getElementById("roll-btn")
+                const diceNo=document.getElementsByClassName("dice-no")
+                const score1E=document.getElementById("score1")
+                const score2E=document.getElementById("score2")
+                let score1V=0
+                let score2V=0
+                let curPlay
+                let nextPlay
+                let randVal
+                playBtn.addEventListener("click",function(){
+                playBtnDiv.innerHTML=`<p style="text-align :center"><button id="hum-btn" onclick=humPlayer()>Against Human</button><button id="comp-btn"onclick=compPlayer()>Against Computer</button><p>`
+
+                })
+                function humPlayer(){
+                playBtnDiv.innerHTML=`<p style=text-align:center>Player 1<p>`
+                rollBtn.style.display="block"
+                nextPlay="player 2"
+                curPlay=`Player 1`
+                }
+                function compPlayer(){
+                playBtnDiv.innerHTML=`<p style=text-align:center>Player 1<p>`
+                nextPlay="computer"
+                rollBtn.style.display="block"
+                curPlay="Player 1"
+                }
+                function getRanDiceNo(){
+                return (Math.floor(Math.random()*6))+1
+                }
+                function pressRollBtn(){
+                if (curPlay=="Player 1"){
+                randVal=getRanDiceNo()
+                diceNo[0].textContent=`${randVal}`
+                curPlay=nextPlay
+                score1V+=randVal
+                playBtnDiv.innerHTML=`<p style=text-align:center>${nextPlay}<p>`
+                score1E.innerText=`Score:${score1V}`
+                if(score1V>= 20){
+                playBtnDiv.innerHTML=`<p style=text-align:center>congratulations player 1 🥳<button onclick=reloadBtn()>play again!</button></p>`
+                curPlay="nothing"
+                }
+                if (nextPlay=="computer"&& curPlay!="nothing"){
+                randVal=getRanDiceNo()
+                diceNo[1].textContent=`${randVal}`
+                curPlay="Player 1"
+                score2V+=randVal
+                playBtnDiv.innerHTML=`<p style=text-align:center>Player 1<p>`
+                score2E.innerHTML=`Score:${score2V}`
+                if(score2V>= 20){
+                playBtnDiv.innerHTML=`<p style=text-align:center>maybe next Time 😪<button onclick=reloadBtn()>play again!</button></p>`
+                curPlay="nothing"
+                }
+                }
+                }
+                else if( curPlay==nextPlay){
+                randVal=getRanDiceNo()
+                diceNo[1].textContent=`${randVal}`
+                curPlay="Player 1"
+                score2V+=randVal
+                playBtnDiv.innerHTML=`<p style=text-align:center>Player 1<p>`
+                score2E.innerHTML=`Score:${score2V}`
+                if(score2V>= 20){
+                playBtnDiv.innerHTML=`<p style=text-align:center>congratulations ${nextPlay} 🥳<button onclick=reloadBtn()>play again!</button></p>`
+                curPlay="nothing"
+                }
+                } 
+                }
+                rollBtn.addEventListener("click",pressRollBtn)
+
+                diceNo[0].addEventListener("click",function(){alert(curPlay)})
+                function reloadBtn(){
+                location.reload()
+                }
+            </script>
+    </body>
+</html>
